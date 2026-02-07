@@ -42,7 +42,7 @@ export const MOCK_MATCHES = [
     id: 1,
     name: 'Luna',
     breed: 'Golden Retriever',
-    avatar: 'https://images.dog.ceo/breeds/retriever-golden/n02099601_1234.jpg',
+    avatar: '/luna.jpg',
     lastMessage: 'Luna just wants to play!',
     time: '2m',
     messages: [
