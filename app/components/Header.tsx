@@ -23,15 +23,20 @@ export function Header({ currentPage, showFilters, onToggleFilters }: HeaderProp
           />
           <h1 className="text-2xl font-bold text-primary">PawPal</h1>
         </div>
-        {currentPage === 'discover' && (
-          <button
-            onClick={onToggleFilters}
-            className="text-primary hover:text-primary/80"
-            aria-label="Filter breeds"
-          >
-            <Sliders size={24} />
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          <a href="/pitch.html" className="text-sm font-medium text-primary hover:text-primary/80">
+            Pitch
+          </a>
+          {currentPage === 'discover' && (
+            <button
+              onClick={onToggleFilters}
+              className="text-primary hover:text-primary/80"
+              aria-label="Filter breeds"
+            >
+              <Sliders size={24} />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )
