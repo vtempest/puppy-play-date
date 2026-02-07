@@ -1,13 +1,61 @@
-# v0 runtime files (should only exist in preview, not in git)
-__v0_runtime_loader.js
-__v0_devtools.tsx
-__v0_jsx-dev-runtime.ts
-instrumentation-client.js
-instrumentation-client.ts
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.env
+.env.local
+frontend/.env
+# dependencies
+node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+docs/dist
+docs/.next
+# testing
+/coverage
+*lock*
+.claude/
+# next.js
+/.next/
+/out/
+.next/*
+# production
+/build
 
-# Common ignores
-node_modules/
-.next/
-.env*.local
+# misc
 .DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*lock.json
+
+# local env files
+.env*.local
+!.env.local.example
+
+# vercel
 .vercel
+.claude
+.vscode
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# supabase for testing
+supabase/.branches
+supabase/.temp
+supabase/**/*.env
+**/.prompts/
+**/__pycache__/
+
+# Sentry Config File
+.env.sentry-build-plugin
+*/.next/*
+.next/
+.next/*
+local.db
+*.db
+drizzle/
+.source/
