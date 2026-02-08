@@ -7,6 +7,12 @@ import { Card } from '@/components/ui/card'
 import Image from 'next/image'
 import { Puppy } from './types'
 
+const AD_URLS = [
+  'https://i.imgur.com/9ApqTcH.jpeg',
+  'https://i.imgur.com/fvkOjT1.jpeg',
+  'https://i.imgur.com/RtK7N5A.jpeg',
+]
+
 interface DiscoverPageProps {
   puppies: Puppy[]
   cardIndex: number
@@ -28,7 +34,11 @@ export function DiscoverPage({
   const [swipeOffset, setSwipeOffset] = useState(0)
   const [swipeRotation, setSwipeRotation] = useState(0)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
+  const [swipeCount, setSwipeCount] = useState(0)
+  const [currentAdUrl, setCurrentAdUrl] = useState(() => AD_URLS[Math.floor(Math.random() * AD_URLS.length)])
   const cardRef = useRef<HTMLDivElement>(null)
+
+  const isAdPosition = swipeCount > 0 && (swipeCount + 1) % 4 === 0
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX)
@@ -51,7 +61,8 @@ export function DiscoverPage({
     const distance = touchStart - endX
 
     if (Math.abs(distance) > swipeThreshold) {
-      onSwipe(distance > 0 ? 'left' : 'right')
+      handleSwipe(distance > 0 ? 'left' : 'right')
+      return
     }
 
     setSwipeOffset(0)
@@ -60,7 +71,12 @@ export function DiscoverPage({
   }
 
   const handleSwipe = (direction: 'left' | 'right') => {
-    onSwipe(direction)
+    if (isAdPosition) {
+      setCurrentAdUrl(AD_URLS[Math.floor(Math.random() * AD_URLS.length)])
+    } else {
+      onSwipe(direction)
+    }
+    setSwipeCount(prev => prev + 1)
     setSwipeOffset(0)
     setSwipeRotation(0)
     setSwipeDirection(null)
@@ -87,7 +103,18 @@ export function DiscoverPage({
             ref={cardRef}
           >
             <div className="relative h-96 w-full bg-secondary">
-              {puppies[cardIndex].image ? (
+              {isAdPosition ? (
+                <Image
+                  key={`ad-${swipeCount}`}
+                  src={currentAdUrl}
+                  alt="Sponsored"
+                  fill
+                  sizes="(max-width: 640px) 100vw, 28rem"
+                  className="object-contain"
+                  priority
+                  unoptimized
+                />
+              ) : puppies[cardIndex].image ? (
                 <Image
                   key={cardIndex}
                   src={puppies[cardIndex].image || "/placeholder.svg"}
@@ -110,18 +137,25 @@ export function DiscoverPage({
 
             {/* Card Info */}
             <div className="relative -mt-16 bg-white px-6 py-4">
-              <div>
-                <h2 className="text-2xl font-bold text-primary">
-                  {puppies[cardIndex].name}
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  {puppies[cardIndex].breed} • {puppies[cardIndex].age}
-                </p>
-                <div className="mt-2 flex items-center gap-1 text-primary">
-                  <MapPin size={16} />
-                  <span className="text-sm">{puppies[cardIndex].distance}</span>
+              {isAdPosition ? (
+                <div>
+                  <h2 className="text-2xl font-bold text-primary">Sponsored</h2>
+                  <p className="text-sm text-muted-foreground">Advertisement</p>
                 </div>
-              </div>
+              ) : (
+                <div>
+                  <h2 className="text-2xl font-bold text-primary">
+                    {puppies[cardIndex].name}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {puppies[cardIndex].breed} • {puppies[cardIndex].age}
+                  </p>
+                  <div className="mt-2 flex items-center gap-1 text-primary">
+                    <MapPin size={16} />
+                    <span className="text-sm">{puppies[cardIndex].distance}</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Swipe Indicators */}
